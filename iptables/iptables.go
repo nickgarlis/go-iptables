@@ -252,9 +252,15 @@ func (ipt *IPTables) Restore(table string, rulesMap map[string][][]string) error
 		}
 	}
 	restoreRules += "\nCOMMIT\n"
-	cmd := []string{"-n"}
 
-	return ipt.runRestore(cmd, restoreRules)
+	return ipt.RestoreRaw(restoreRules)
+}
+
+// RestoreRaw replaces specified chains and rules in a specific table
+// input is a string containing the raw iptables-restore input
+func (ipt *IPTables) RestoreRaw(input string) error {
+	cmd := []string{"-n"}
+	return ipt.runRestore(cmd, input)
 }
 
 // Append appends rulespec to specified table/chain
